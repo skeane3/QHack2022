@@ -30,6 +30,40 @@ def n_swaps(cnot):
 
     # QHACK #
 
+    def find_all_paths(start, end, graph = graph, path=[]):
+        path = path + [start]
+        if start == end:
+            return [path]
+        paths = []
+        for node in graph[start]:
+            if node not in path:
+                newpaths = find_all_paths(node, end, graph, path)
+                for newpath in newpaths:
+                    paths.append(newpath)
+        return paths
+
+    def find_min_swaps(start, end):
+        # Find all paths from start to end
+        paths = find_all_paths(start, end)
+        # The first index considers the first path found. The second slice removes the first and last nodes form the paths, as these do not require a swap
+        min_swaps = len(paths[0][1:-1])
+        # If there is only one path, then we can return our answer
+        if len(paths) == 1:
+            return min_swaps
+        # Else, check the length of all other paths to see if any are shorter
+        for i in range(1, len(paths)):
+            swaps = len(paths[i][1:-1])
+            if swaps < min_swaps:
+                min_swaps = swaps
+        return min_swaps
+
+    start = cnot.wires[0]
+    end = cnot.wires[1]
+
+    # Multiply by 2 as this considers the one way path, but we must also make the same number of swaps to obtain the original topology
+    min_swaps = 2*find_min_swaps(start, end)
+
+    return min_swaps
     # QHACK #
 
 

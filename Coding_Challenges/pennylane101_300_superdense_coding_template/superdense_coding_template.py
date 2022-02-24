@@ -22,14 +22,30 @@ def superdense_coding(bits, alpha):
     # QHACK #
 
     # Prepare entangled state here
-
+    # First apply the RY gate to qubit 1, with angle alpha
+    # Note we 8 by 2 as RY implements the angle divided by 2
+    qml.RY(2*alpha, wires = 0)
+    # Then apply the CNOT gate
+    qml.CNOT(wires = [0, 1])
     # Implement Alice's operations on her qubit here
+    if bits == 0:
+        pass
+    elif bits == 1:
+        qml.PauliX(wires = 0)
+    elif bits == 2:
+        qml.PauliZ(wires = 0)
+    elif bits == 3:
+        qml.PauliX(wires = 0)
+        qml.PauliZ(wires = 0)
 
     # Implement Bob's measurement procedure here
+    qml.CNOT(wires = [0, 1])
+    qml.Hadamard(wires = 0)
 
+    return qml.probs(wires = [0, 1])
     # QHACK #
 
-    return qml.probs(wires=[0, 1])
+
 
 
 def return_probs(bits, alpha):

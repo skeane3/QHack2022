@@ -26,7 +26,10 @@ def compute_entanglement(theta):
     dev = qml.device("default.qubit", wires=3)
 
     # QHACK #
-
+    @qml.qnode(dev)
+    def prepare():
+        # The first state is Bell(0, 1) state
+        qml.
     # QHACK #
 
 

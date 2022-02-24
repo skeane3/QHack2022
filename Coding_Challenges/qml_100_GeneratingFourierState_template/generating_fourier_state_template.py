@@ -26,9 +26,31 @@ def generating_fourier_state(n_qubits, m):
         """This is the quantum circuit that we will use."""
 
         # QHACK #
+        '''
+        # Convert m to a binary list
+        m_binary = []
+        k = int(2**(n_qubits-1))
+        for i in range(n_qubits):
+            if m/k >= 1:
+                m -= k
+                m_binary.append(1)
+            else:
+                m_binary.append(0)
+            k = k/2
+        '''
+
+        # First, prepare the register in the state |m>
+        m_binary = np.binary_repr(m, n_qubits)
+
+        for i in range(len(m_binary)):
+            if m_binary[i] == '1':
+                qml.PauliX(wires = i)
+
 
         # Add the template of the statement with the angles passed as an argument.
-
+        for i in range(len(angles)):
+            qml.Hadamard(wires = i)
+            qml.RZ(angles[i], wires = i)
         # QHACK #
 
         # We apply QFT^-1 to return to the computational basis.
@@ -47,7 +69,16 @@ def generating_fourier_state(n_qubits, m):
         # QHACK #
 
         # The return error should be smaller when the state m is more likely to be obtained.
+        error = 0
+        n = len(probs)
 
+        for i in range(n):
+            if i != m:
+                #error += abs(probs[i])
+                error += (probs[i])**2
+
+        #return error
+        return np.sqrt(error)
         # QHACK #
 
     # This subroutine will find the angles that minimize the error function.
@@ -59,6 +90,7 @@ def generating_fourier_state(n_qubits, m):
     angles = np.zeros(n_qubits, requires_grad=True)
 
     for epoch in range(epochs):
+        print(epoch)
         angles = opt.step(error, angles)
         angles = np.clip(opt.step(error, angles), -2 * np.pi, 2 * np.pi)
 

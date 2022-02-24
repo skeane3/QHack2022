@@ -22,21 +22,31 @@ def deutsch_jozsa(oracle):
         # QHACK #
 
         # Insert any pre-oracle processing here
+        # Put our ancilla in state |1>
+        qml.PauliX(wires=2)
+
+        qml.Hadamard(wires=0)
+        qml.Hadamard(wires=1)
+        qml.Hadamard(wires=2)
 
         oracle()  # DO NOT MODIFY this line
 
         # Insert any post-oracle processing here
-
+        qml.Hadamard(wires=0)
+        qml.Hadamard(wires=1)
         # QHACK #
 
         return qml.sample(wires=range(2))
 
     sample = circuit()
-
     # QHACK #
-
+    f = 'constant' # Assumes all entries in sample is a 0
+    for s in sample:
+        if s != 0:
+            f = 'balanced'
+            break
     # From `sample` (a single call to the circuit), determine whether the function is constant or balanced.
-
+    return f
     # QHACK #
 
 

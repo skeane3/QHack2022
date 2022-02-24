@@ -18,6 +18,14 @@ def binary_list(m, n):
 
     arr = []
     # QHACK #
+    k = int(2**(n-1))
+    for i in range(n):
+        if m/k >= 1:
+            m -= k
+            arr.append(1)
+        else:
+            arr.append(0)
+        k = k/2
 
     # QHACK #
     return arr
@@ -37,6 +45,8 @@ def basis_states(n):
     arr = []
 
     # QHACK #
+    for i in range(2**n):
+        arr.append(binary_list(i, n))
 
     # QHACK #
 
@@ -56,7 +66,21 @@ def is_particle_preserving(circuit, n):
     """
 
     # QHACK #
+    # Get a list of all possible basis state for n qubits
+    basis = basis_states(n)
+    for b in basis:
+        new_state = circuit(b)
+        n_before = sum(b)
+        # new_state is in tensor state form, and so we cannot simply compute the sum. Note that each element in
+        # this array represents the probability of some state existing. This means that all the coefficients of basis states
+        # which Hamming weight different from the initial state should be zero. Eg, if the initial state has on particle, then
+        # the basis state |000>, |110> etc should have zero coefficients
+        for i in range(len(basis)):
+            #print(f'new_state[i] = {new_state[i]}')
+            if ((sum(basis[i]) != n_before) and (new_state[i] != 0)):
+                return False
 
+    return True
     # QHACK #
 
 

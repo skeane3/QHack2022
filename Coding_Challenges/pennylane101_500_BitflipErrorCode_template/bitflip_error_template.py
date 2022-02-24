@@ -22,7 +22,7 @@ def error_wire(circuit_output):
     """
 
     # QHACK #
-
+    error_stats = np.zeros(4)
     # process the circuit output here and return which qubit was the victim of a bitflip error!
 
     # QHACK #
@@ -49,14 +49,16 @@ def circuit(p, alpha, tampered_wire):
     qml.QubitDensityMatrix(density_matrix(alpha), wires=[0, 1, 2])
 
     # QHACK #
-
     # put any input processing gates here
+    qml.Hadamard(wires=0)
+    qml.CNOT(wires=[0, 1])
 
     qml.BitFlip(p, wires=int(tampered_wire))
 
     # put any gates here after the bitflip error has occurred
 
     # return something!
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
     # QHACK #
 
 
