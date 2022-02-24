@@ -1,3 +1,15 @@
+Completed Challenges:
+- pennylane101_100_OrderMatters_template
+- pennylane101_200_KnowYourDevices_template
+- pennylane101_300_superdense_coding_template
+- pennylane101_400_FiniteDifferenceGradient_template
+- algorithms_100_DeutschJozsa_template
+- algorithms_200_AdaptingTopology_template
+- algorithms_300_AdderQFT_template
+- qchem_100_IsParticlePreserving_template
+- qchem_200_OptimizingMeasurements_template
+- qchem_300_Universality_Givens_template
+
 ![image](img/qhack-banner.png)
 
 Welcome to [QHack](https://qhack.ai), the one-of-a-kind quantum computing hackathon! 
